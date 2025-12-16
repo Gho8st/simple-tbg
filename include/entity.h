@@ -12,8 +12,10 @@ class Entity {
 
         int take_damage(int dmg);
         int heal(int hp);
+        bool is_alive() const;
 
         int get_health() const;
+        int get_max_health() const;
         int get_attack() const;
         int get_defense() const;
 };

@@ -18,6 +18,11 @@ int Entity::heal(int hp) {
     return hp;
 }
 
+bool Entity::is_alive() const {
+    return health > 0;
+}
+
 int Entity::get_health() const {return health;}
+int Entity::get_max_health() const {return max_health;}
 int Entity::get_attack() const {return attack;}
 int Entity::get_defense() const {return defense;}

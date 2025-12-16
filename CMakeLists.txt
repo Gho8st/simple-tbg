@@ -4,6 +4,7 @@ project(simple_tbg CXX)
 set(SOURCES
     src/main.cpp
     src/entity.cpp
+    src/team.cpp
 )
 
 add_executable(SimpleTBG

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstdio>
-#include "entity.h"
+#include "team.h"
 using namespace std;
 
 void print_status(Entity, Entity);
@@ -12,9 +12,16 @@ int main() {
     bool turn = true;
     int move = 0;
 
+    Team player_team("Player");
+    Team enemy_team("Enemy");
+
+    player_team.add_teammate(player);
+    enemy_team.add_teammate(enemy);
+
     cout << "Welcome to Simple TBG\n";
-    while (player.get_health() > 0 &&  enemy.get_health() > 0) {
-        print_status(player, enemy);
+    while (player_team.if_alive() && enemy_team.if_alive()) {
+        player_team.print_status();
+        enemy_team.print_status();
 
         if(turn) {
             cout << "Now choose which option to use ur move...\n";
