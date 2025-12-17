@@ -1,16 +1,26 @@
 #include <iostream>
 #include <cstdio>
+#include <random>
 #include "team.h"
+#include "turn_manager.h"
 using namespace std;
 
 void print_status(Entity, Entity);
+int random_index(vector<Entity*> list);
 
 int main() {
 
-    Entity player(100, 20, 5);
-    Entity enemy(100, 15, 5);
-    bool turn = true;
-    int move = 0;
+    Entity player("Player #1",100, 20, 5,110);
+    Entity player2("Player #1",100, 20, 5,120);
+    Entity enemy("Enemy #1", 100, 15, 5, 100);
+    Entity enemy2("Enemy #2", 100, 15, 5, 90);
+
+    int move = -1;
+
+    std::vector<Entity*> list;
+    list.emplace_back(&player);
+    list.emplace_back(&enemy);
+    TurnManager turnManager(list);
 
     Team player_team("Player");
     Team enemy_team("Enemy");
@@ -18,32 +28,30 @@ int main() {
     player_team.add_teammate(player);
     enemy_team.add_teammate(enemy);
 
-    cout << "Welcome to Simple TBG\n";
+    // cout << "Welcome to Simple TBG\n";
     while (player_team.if_alive() && enemy_team.if_alive()) {
         player_team.print_status();
         enemy_team.print_status();
 
-        if(turn) {
+        Entity *current = turnManager.next_turn();
+
+        if(player_team.contains(current->get_name())) {
             cout << "Now choose which option to use ur move...\n";
             cout << "1. Attack\n";
             cout << "2. Heal\n";
             cout << "... or Skip\n";
             cin >> move;
             if (move == 1) {
-                int dmg = enemy.take_damage(player.get_attack());
+                int dmg = enemy.take_damage(current->get_attack());
                 printf("Player attacks with %d damage\n", dmg);
-                turn = !turn;
             } else if (move == 2) {
-                player.heal(20);
+                current->heal(20);
                 printf("Player heals with 20 health\n");
-                turn = !turn;
-            } else {
-                turn = !turn;
             }
         } else {
-            int dmg = player.take_damage(enemy.get_attack());
+            int position = random_index(player_team.get_team(true));
+            int dmg = player_team.get_team_member(position)->take_damage(current->get_attack());
             printf("Enemy's turn..\nNow the enemy attacks with %d damage\n", dmg);
-            turn = !turn;
         }
     }
 
@@ -53,6 +61,13 @@ int main() {
         cout << "Player lost\n";
     return 0;
 
+}
+
+int random_index(vector<Entity*> list) {
+    std::random_device dev;
+    std::mt19937 randomness_generator(dev());
+    std::uniform_int_distribution<int> index_destribution(0, list.size()-1);
+    return index_destribution(randomness_generator);
 }
 
 void print_status(Entity p, Entity e) {

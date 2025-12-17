@@ -39,11 +39,16 @@ bool Team::if_alive() const{
     return true;
 }
 
-Entity Team::get_team_member(int index) {
-    if (index < 1 || index > teammates.size())
+bool Team::contains(std::string name) const {
+    for (Entity* member : teammates)
+        if (member->get_name() == name) return true;
+    return false;
+}
+
+Entity* Team::get_team_member(int index) {
+    if (index < 0 || index > teammates.size())
         throw std::runtime_error("Index is out of bounds");
     else {
-        Entity member = *teammates[index-1];
-        return member;
+        return teammates[index];
     }
 }

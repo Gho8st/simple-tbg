@@ -17,8 +17,9 @@ class Team {
         void add_teammate(Entity& member);
         void print_status();
         bool if_alive() const;
+        bool contains(std::string name) const;
         std::vector<Entity*> get_team(bool alive);
-        Entity get_team_member(int index);
+        Entity* get_team_member(int index);
 
 };
 

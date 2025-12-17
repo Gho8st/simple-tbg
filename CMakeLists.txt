@@ -5,6 +5,7 @@ set(SOURCES
     src/main.cpp
     src/entity.cpp
     src/team.cpp
+    src/turn_manager.cpp
 )
 
 add_executable(SimpleTBG
