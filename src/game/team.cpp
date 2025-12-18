@@ -11,11 +11,11 @@ void Team::add_teammate(Entity& entity) {
     teammates.push_back(&entity);
 }
 
-void Team::print_status() {
+void Team::print_status(bool alive) {
+    std::vector<Entity*> members = alive ? get_team(alive) : teammates;
     printf("-------- %s Team ---------\n", id.c_str());
-    int i = 1;
-    for (Entity* member: teammates) {
-        printf("---- %d: HP: %d/%d, ATK: %d \n", i++, member->get_health(), member->get_max_health(), member->get_attack());
+    for (Entity* member: members) {
+        printf("---- %s: HP: %d/%d, ATK: %d \n", member->get_name().c_str(), member->get_health(), member->get_max_health(), member->get_attack());
     }
     printf("--------  ---------\n");
 }
@@ -34,9 +34,9 @@ std::vector<Entity*> Team::get_team(bool alive) {
 
 bool Team::if_alive() const{
     for (Entity* e: teammates) {
-        if (!e->is_alive()) return false;
+        if (e->is_alive()) return true;
     }
-    return true;
+    return false;
 }
 
 bool Team::contains(std::string name) const {
@@ -45,10 +45,11 @@ bool Team::contains(std::string name) const {
     return false;
 }
 
-Entity* Team::get_team_member(int index) {
-    if (index < 0 || index > teammates.size())
+Entity* Team::get_team_member(int index, bool alive) {
+    std::vector<Entity*> members = alive ? get_team(alive) : teammates;
+    if (index < 0 || index > members.size())
         throw std::runtime_error("Index is out of bounds");
     else {
-        return teammates[index];
+        return members[index];
     }
 }

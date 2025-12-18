@@ -23,8 +23,8 @@ Outcome GameManager::check_outcome() {
 }
 
 void GameManager::play_turn() {
-    playerTeam->print_status();
-    enemyTeam->print_status();
+    playerTeam->print_status(false);
+    enemyTeam->print_status(false);
 
     Entity* current = turnManager->next_turn();
 
@@ -38,22 +38,23 @@ void GameManager::play_turn() {
         if (move == 1) {
             int target = 0;
             std::cout << "Now choose ur target...\n";
-            enemyTeam->print_status();
+            enemyTeam->print_status(true);
 
             while(target < 1 || target > enemyTeam->get_team(true).size())
                 std::cin >> target;
-            
-            int dmg = enemyTeam->get_team_member(target-1)->take_damage(current->get_attack());
-            printf("Player attacks with %d damage\n", dmg);
+            Entity* targetEnemy = enemyTeam->get_team_member(target-1, true);
+            int dmg = targetEnemy->take_damage(current->get_attack());
+            printf("%s attacks %s with %d damage\n", current->get_name().c_str(), targetEnemy->get_name().c_str(),dmg);
         } else if (move == 2) {
             current->heal(20);
-            printf("Player heals with 20 health\n");
+            printf("%s heals with 20 health\n", current->get_name().c_str());
         }
 
     } else {
         int position = random_index(playerTeam->get_team(true));
-        int dmg = playerTeam->get_team_member(position)->take_damage(current->get_attack());
-        printf("Enemy's turn..\nNow the enemy attacks with %d damage\n", dmg);
+        Entity* targetEnemy = playerTeam->get_team_member(position, true);
+        int dmg = targetEnemy->take_damage(current->get_attack());
+        printf("Enemy's turn..\nNow %s attacks %s with %d damage\n", current->get_name().c_str(), targetEnemy->get_name().c_str(), dmg);
     }
 
     if (!playerTeam->if_alive()) outcome = Outcome::Enemy;
