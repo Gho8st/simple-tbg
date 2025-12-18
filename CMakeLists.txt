@@ -3,9 +3,9 @@ project(simple_tbg CXX)
 
 set(SOURCES
     src/main.cpp
-    src/entity.cpp
-    src/team.cpp
-    src/turn_manager.cpp
+    src/entity/entity.cpp
+    src/game/team.cpp
+    src/game/turn_manager.cpp
 )
 
 add_executable(SimpleTBG

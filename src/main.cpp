@@ -11,9 +11,7 @@ int random_index(vector<Entity*> list);
 int main() {
 
     Entity player("Player #1",100, 20, 5,110);
-    Entity player2("Player #1",100, 20, 5,120);
     Entity enemy("Enemy #1", 100, 15, 5, 100);
-    Entity enemy2("Enemy #2", 100, 15, 5, 90);
 
     int move = -1;
 
@@ -28,7 +26,7 @@ int main() {
     player_team.add_teammate(player);
     enemy_team.add_teammate(enemy);
 
-    // cout << "Welcome to Simple TBG\n";
+    cout << "Welcome to Simple TBG\n";
     while (player_team.if_alive() && enemy_team.if_alive()) {
         player_team.print_status();
         enemy_team.print_status();
