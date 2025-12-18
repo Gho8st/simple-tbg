@@ -6,6 +6,7 @@ set(SOURCES
     src/entity/entity.cpp
     src/game/team.cpp
     src/game/turn_manager.cpp
+    src/game/game_manager.cpp
 )
 
 add_executable(SimpleTBG
