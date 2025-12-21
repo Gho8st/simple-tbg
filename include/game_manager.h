@@ -8,7 +8,7 @@
 enum Outcome {
     Failure,
     Success,
-    None
+    NoOutcome
 };
 
 class GameManager {
@@ -16,8 +16,10 @@ class GameManager {
         TurnManager* turnManager;
         Team* playerTeam;
         Team* enemyTeam;
-        Outcome outcome = Outcome::None;
+        Outcome outcome = Outcome::NoOutcome;
         std::vector<Skill> skill_list;
+
+        void use_skill(Entity& current, Entity& target, Skill& skill);
 
     public:
         GameManager(Team& player, Team& enemy, std::vector<Skill> skill_list);

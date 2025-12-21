@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include "status_effect.h"
+
 
 class Entity {
     private:
@@ -13,6 +15,7 @@ class Entity {
         std::string id;
 
         std::vector<std::string> skill_set;
+        std::vector<StatusEffect> status_effect_list;
 
     public:
         Entity(std::string name, int hp, int atk, int def, int spd);
@@ -30,6 +33,10 @@ class Entity {
 
         void add_skill(std::string);
         std::vector<std::string> get_skills();
+
+        void add_status_effect(StatusEffect effect);
+        void inflict_status();
+        std::vector<StatusEffect> get_statuses();
 };
 
 #endif

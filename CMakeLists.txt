@@ -9,6 +9,7 @@ set(SOURCES
     src/game/game_manager.cpp
     src/skills/skill_effect.cpp
     src/skills/skill.cpp
+    src/skills/status_effect.cpp
 )
 
 add_executable(SimpleTBG
