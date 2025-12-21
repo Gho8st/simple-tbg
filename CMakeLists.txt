@@ -7,6 +7,8 @@ set(SOURCES
     src/game/team.cpp
     src/game/turn_manager.cpp
     src/game/game_manager.cpp
+    src/skills/skill_effect.cpp
+    src/skills/skill.cpp
 )
 
 add_executable(SimpleTBG

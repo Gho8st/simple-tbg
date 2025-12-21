@@ -22,8 +22,22 @@ int main() {
     enemy_team.add_teammate(globlin);
     enemy_team.add_teammate(mob);
 
+    for (Entity* entity: player_team.get_team(false)) {
+        entity->add_skill("Slash");
+        entity->add_skill("Heal");
+    }
+    for (Entity* entity: enemy_team.get_team(false)) {
+        entity->add_skill("Slash");
+        entity->add_skill("Heal");
+    }
+
+    SkillEffect slash_effect(SkillType::Attack, 20);
+    SkillEffect heal_effect(SkillType::Heal, 20);
+    Skill slash("Slash", {slash_effect});
+    Skill heal("Heal", {heal_effect});
+
     cout << "Welcome to Simple TBG\n";
-    GameManager gameManager = GameManager(player_team, enemy_team);
+    GameManager gameManager = GameManager(player_team, enemy_team, {slash, heal});
     while (gameManager.still_running()) {
         gameManager.play_turn();
     }

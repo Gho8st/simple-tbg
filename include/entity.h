@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include <string>
+#include <vector>
 
 class Entity {
     private:
@@ -10,6 +11,8 @@ class Entity {
         int defense;
         int speed;
         std::string id;
+
+        std::vector<std::string> skill_set;
 
     public:
         Entity(std::string name, int hp, int atk, int def, int spd);
@@ -25,7 +28,8 @@ class Entity {
         int get_speed() const;
         std::string get_name() const;
 
-        
+        void add_skill(std::string);
+        std::vector<std::string> get_skills();
 };
 
 #endif
