@@ -17,7 +17,6 @@ class SkillEffect {
     public:
         SkillEffect(SkillType type, int flat = 0, float multi = 0.0f);
         void take_action(Entity& user, Entity& target);
-        void print_effect();
 
         SkillType get_type();
 

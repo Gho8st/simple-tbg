@@ -40,39 +40,63 @@ void GameManager::play_turn() {
         print_skills(*current);
         move = choose_action(*current, false);
         Skill chosen_skill = find_skill_at(*current, skill_list, move);
-        
-        if (chosen_skill.get_effects()[0].get_type() == SkillType::Attack) {
-            std::cout << "Now choose who to attack...\n";
-            enemyTeam->print_status(true);
-            while (target < 1 || target > enemyTeam->get_team(true).size())
-                std::cin >> target;
-            Entity* chosen_target = enemyTeam->get_team_member(target-1, true);
-            chosen_skill.get_effects()[0].take_action(*current, *chosen_target);
-        } else {
-            std::cout << "Now choose who to heal...\n";
+
+        if (chosen_skill.get_target() == TargetType::Ally) { // Ally target
+            std::cout << "Now choose an ally...\n";
             playerTeam->print_status(true);
             while (target < 1 || target > playerTeam->get_team(true).size())
                 std::cin >> target;
             Entity* chosen_target = playerTeam->get_team_member(target-1, true);
             chosen_skill.get_effects()[0].take_action(*current, *chosen_target);
+        } else if (chosen_skill.get_target() == TargetType::Enemy) { // Enemy target
+            std::cout << "Now choose an enemy...\n";
+            enemyTeam->print_status(true);
+            while (target < 1 || target > enemyTeam->get_team(true).size())
+                std::cin >> target;
+            Entity* chosen_target = enemyTeam->get_team_member(target-1, true);
+            chosen_skill.get_effects()[0].take_action(*current, *chosen_target);
+        } else if (chosen_skill.get_target() == TargetType::Self) { // Self target
+            chosen_skill.get_effects()[0].take_action(*current, *current);
+        } else if (chosen_skill.get_target() == TargetType::AOE_Ally) { // Whole sqaud target
+            for (Entity *entity: playerTeam->get_team(true)) {
+                chosen_skill.get_effects()[0].take_action(*current, *entity);
+            }
+        } else if (chosen_skill.get_target() == TargetType::AOE_Enemy) { // Whole enemy target
+            for (Entity *entity: enemyTeam->get_team(true)) {
+                chosen_skill.get_effects()[0].take_action(*current, *entity);
+            }
         }
-
     } else {
         move = choose_action(*current, true);
         Skill chosen_skill = find_skill_at(*current, skill_list, move);
         Team* chosen_team;
-        if (chosen_skill.get_effects()[0].get_type() == SkillType::Attack) {
+        if (chosen_skill.get_target() == TargetType::Enemy) {
             chosen_team = playerTeam;
-        } else {
+            int position = random_index(chosen_team->get_team(true));
+            Entity* target = chosen_team->get_team_member(position, true);
+            chosen_skill.get_effects()[0].take_action(*current, *target);
+        } else if (chosen_skill.get_target() == TargetType::Ally) {
             chosen_team = enemyTeam;
+            int position = random_index(chosen_team->get_team(true));
+            Entity* target = chosen_team->get_team_member(position, true);
+            chosen_skill.get_effects()[0].take_action(*current, *target);
+        }  else if (chosen_skill.get_target() == TargetType::Self) { // Self target
+            chosen_skill.get_effects()[0].take_action(*current, *current);
+        } else if (chosen_skill.get_target() == TargetType::AOE_Ally) { // Whole sqaud target
+            for (Entity *entity: enemyTeam->get_team(true)) {
+                chosen_skill.get_effects()[0].take_action(*current, *entity);
+            }
+        } else if (chosen_skill.get_target() == TargetType::AOE_Enemy) { // Whole enemy target
+            for (Entity *entity: playerTeam->get_team(true)) {
+                chosen_skill.get_effects()[0].take_action(*current, *entity);
+            }
         }
-        int position = random_index(chosen_team->get_team(true));
-        Entity* target = chosen_team->get_team_member(position, true);
-        chosen_skill.get_effects()[0].take_action(*current, *target);
     }
+    
+    std::cout << "\n";
 
-    if (!playerTeam->if_alive()) outcome = Outcome::Enemy;
-    if (!enemyTeam->if_alive()) outcome = Outcome::Player;
+    if (!playerTeam->if_alive()) outcome = Outcome::Failure;
+    if (!enemyTeam->if_alive()) outcome = Outcome::Success;
 }
 
 int random_index(std::vector<Entity*> list) {

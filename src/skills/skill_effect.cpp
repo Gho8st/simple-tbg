@@ -19,20 +19,3 @@ void SkillEffect::take_action(Entity& user, Entity& target) {
 }
 
 SkillType SkillEffect::get_type() {return type;}
-
-void SkillEffect::print_effect() {
-    std::string name_type;
-    switch (type) {
-        case SkillType::Attack:
-            name_type = "Attack";
-            break;
-        case SkillType::Heal:
-            name_type = "Heal";
-            break;
-        default:
-            name_type = "Unknown";
-            break;
-    }
-
-    std::printf("--- Type: %s | Flat: %d | Multi %.2f ---\n", name_type.c_str(), flat_value, multiplier);
-}

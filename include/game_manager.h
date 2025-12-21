@@ -6,8 +6,8 @@
 #include "skill.h"
 
 enum Outcome {
-    Player,
-    Enemy,
+    Failure,
+    Success,
     None
 };
 
