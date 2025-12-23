@@ -6,10 +6,20 @@ pkg_check_modules(RAYLIB REQUIRED raylib)
 
 add_executable(SimpleTBG
     main.cpp
+
+    external/imgui/imgui.cpp
+    external/imgui/imgui_draw.cpp
+    external/imgui/imgui_tables.cpp
+    external/imgui/imgui_widgets.cpp
+    external/imgui/imgui_demo.cpp
+
+    external/rlImGui/rlImGui.cpp
 )
 
 target_include_directories(SimpleTBG PRIVATE
     include
+    external/imgui
+    external/rlImGui
     ${RAYLIB_INCLUDE_DIRS}
 )
 

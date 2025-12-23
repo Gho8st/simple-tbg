@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cstdio>
 #include "raylib.h"
+#include "rlImGui.h"
+#include "imgui.h"
+
 using namespace std;
 
 class Entity {
@@ -67,13 +70,31 @@ int main(int argc, char *argv[]) {
         InitWindow(800, 600, "Turn Based Game");
         SetTargetFPS(60);
 
+        rlImGuiSetup(true);
+
+        bool showDemo = true;
+
         while (!WindowShouldClose()) {
             BeginDrawing();
             ClearBackground(WHITE);
-            DrawText("Title Screen", 350, 280, 20, BLACK);
+
+            rlImGuiBegin();
+
+            if (showDemo) {
+                ImGui::ShowDemoWindow(&showDemo);
+            }
+
+            ImGui::Begin("Debug Window");
+            ImGui::Text("Title Screen");
+            ImGui::End();
+
+            rlImGuiEnd();
+
+
             EndDrawing();
         }
 
+        rlImGuiShutdown();
         CloseWindow();
     } else {
         cout << "Not proper arguement given\n";
