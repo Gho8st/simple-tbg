@@ -7,7 +7,8 @@
 enum SkillType {
     Attack,
     Heal,
-    Debuff
+    Debuff,
+    Buff
 };
 
 class SkillEffect {

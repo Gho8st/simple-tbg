@@ -1,7 +1,7 @@
 #include "status_effect.h"
 #include <algorithm>
 
-StatusEffect::StatusEffect(StatusEffectType type, int turns, int value) {
+StatusEffect::StatusEffect(StatusEffectType type, int turns, float value) {
     this->type = type;
     this->turns = turns;
     this->value = value;

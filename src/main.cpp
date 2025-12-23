@@ -19,6 +19,7 @@ int main() {
     Team enemy_team("Enemy");
 
     warrior.add_skill("Swipe");
+    tank.add_skill("Ravage");
     healer.add_skill("First Aid");
     mage.add_skill("Fireball");
 
@@ -43,15 +44,17 @@ int main() {
     SkillEffect super_heal_effect(SkillType::Heal, 20);
     SkillEffect burn_mark(SkillType::Attack, 10);
     SkillEffect burn(SkillType::Debuff, 10, 0.0f, StatusEffect(StatusEffectType::Burn, 2, 5));
+    SkillEffect ravage(SkillType::Buff, 0, 0.0f, StatusEffect(StatusEffectType::AttackUp, 2, 1.5f));
   
     Skill slash("Slash", TargetType::Enemy, {slash_effect});
     Skill fire_ball("Fireball", TargetType::Enemy, {burn_mark, burn});
     Skill swipe("Swipe", TargetType::AOE_Enemy, {slash_effect});
     Skill heal("Heal", TargetType::Ally, {heal_effect});
     Skill first_aid("First Aid", TargetType::Self, {super_heal_effect});
+    Skill ravage_buff("Ravage", TargetType::Self, {ravage});
 
     cout << "Welcome to Simple TBG\n";
-    GameManager gameManager = GameManager(player_team, enemy_team, {slash, heal, swipe, first_aid, fire_ball});
+    GameManager gameManager = GameManager(player_team, enemy_team, {slash, heal, swipe, first_aid, fire_ball, ravage_buff});
     while (gameManager.still_running()) {
         gameManager.play_turn();
     }
