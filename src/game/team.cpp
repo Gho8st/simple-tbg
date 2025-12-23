@@ -15,7 +15,7 @@ void Team::print_status(bool alive) {
     std::vector<Entity*> members = alive ? get_team(alive) : teammates;
     printf("-------- %s Team ---------\n", id.c_str());
     for (Entity* member: members) {
-        printf("---- %s: HP: %d/%d, ATK: %d ", member->get_name().c_str(), member->get_health(), member->get_max_health(), member->get_attack());
+        printf("---- %s: HP: %d/%d, ATK: %d ", member->get_name().c_str(), member->get_health(), member->get_max_health(), member->get_effective_attack());
         if (!member->get_statuses().empty()) {
             printf("| Status: ");
             for(StatusEffect status: member->get_statuses()) {
@@ -26,6 +26,24 @@ void Team::print_status(bool alive) {
                         break;
                     case StatusEffectType::Poison:
                         effect = "Poison";
+                        break;
+                    case StatusEffectType::AttackUp:
+                        effect = "Attack↑";
+                        break;
+                    case StatusEffectType::AttackDown:
+                        effect = "Attack↓";
+                        break;
+                    case StatusEffectType::DefenseUp:
+                        effect = "Defense↑";
+                        break;
+                    case StatusEffectType::DefenseDown:
+                        effect = "Defense↓";
+                        break;
+                    case StatusEffectType::SpeedUp:
+                        effect = "Speed↑";
+                        break;
+                    case StatusEffectType::SpeedDown:
+                        effect = "Speed↓";
                         break;
                     default:
                         effect = "None";

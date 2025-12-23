@@ -29,6 +29,10 @@ class Entity {
         int get_attack() const;
         int get_defense() const;
         int get_speed() const;
+
+        int get_effective_speed();
+        int get_effective_attack();
+        int get_effective_defense();
         std::string get_name() const;
 
         void add_skill(std::string);

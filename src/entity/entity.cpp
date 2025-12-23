@@ -10,7 +10,7 @@ Entity::Entity(std::string name, int hp, int atk, int def, int spd) {
 }
 
 int Entity::take_damage(int dmg) {
-    int final_dmg = std::max(0, dmg - defense);
+    int final_dmg = std::max(0, dmg - get_effective_defense());
     health = std::max(0, health - final_dmg);
     return final_dmg;
 }
@@ -40,13 +40,13 @@ void Entity::inflict_status() {
         
         switch(effect.get_type()) {
             case StatusEffectType::Burn: {
-                health = std::max(0, health-effect.get_value());
-                std::printf("Burn inflicted on %s for %d damage", id.c_str(), effect.get_value());
+                health = std::max(0, health - (int) effect.get_value());
+                std::printf("Burn inflicted on %s for %d damage\n", id.c_str(), effect.get_value());
             }
                 break;
             case StatusEffectType::Poison: {
-                health = std::max(0, health-effect.get_value());
-                std::printf("Poison inflicted on %s for %d damage", id.c_str(), effect.get_value());
+                health = std::max(0, health - (int) effect.get_value());
+                std::printf("Poison inflicted on %s for %d damage\n", id.c_str(), effect.get_value());
             }
                 break;
             default:
@@ -59,6 +59,45 @@ void Entity::inflict_status() {
     }
 
     status_effect_list = new_status;
+}
+
+int Entity::get_effective_attack() {
+    int atk = get_attack();
+    float multi = 1.0f;
+    for (StatusEffect status : get_statuses()) {
+        if (status.get_type() == StatusEffectType::AttackUp)
+            multi += status.get_value();
+        else if (status.get_type() == StatusEffectType::AttackDown)
+            multi -= status.get_type();
+    }
+
+    return (int) (atk * multi);
+}
+
+int Entity::get_effective_defense() {
+    int def = get_defense();
+    float multi = 1.0f;
+    for (StatusEffect status : get_statuses()) {
+        if (status.get_type() == StatusEffectType::DefenseUp)
+            multi += status.get_value();
+        else if (status.get_type() == StatusEffectType::DefenseDown)
+            multi -= status.get_type();
+    }
+
+    return (int) (def * multi);
+}
+
+int Entity::get_effective_speed() {
+    int spd = get_speed();
+    float multi = 1.0f;
+    for (StatusEffect status : get_statuses()) {
+        if (status.get_type() == StatusEffectType::SpeedUp)
+            multi += status.get_value();
+        else if (status.get_type() == StatusEffectType::SpeedDown)
+            multi -= status.get_type();
+    }
+
+    return (int) (spd * multi);
 }
 
 int Entity::get_health() const {return health;}

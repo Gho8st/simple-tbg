@@ -32,6 +32,8 @@ void GameManager::play_turn() {
     enemyTeam->print_status(false);
 
     Entity* current = turnManager->next_turn();
+    current->inflict_status();
+    if (!current->is_alive()) return;
 
     int move = -1, target = -1;
     // each skill is assumed to only have one effect for testing
@@ -92,8 +94,6 @@ void GameManager::play_turn() {
             }
         }
     }
-
-    current->inflict_status();
 
     std::cout << "\n";
 
