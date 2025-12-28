@@ -5,7 +5,9 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(RAYLIB REQUIRED raylib)
 
 add_executable(SimpleTBG
-    main.cpp
+    src/main.cpp
+    src/states/menu_state.cpp
+    src/states/state_manager.cpp
 
     external/imgui/imgui.cpp
     external/imgui/imgui_draw.cpp

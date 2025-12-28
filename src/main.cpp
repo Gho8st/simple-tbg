@@ -3,6 +3,8 @@
 #include "raylib.h"
 #include "rlImGui.h"
 #include "imgui.h"
+#include "state_manager.h"
+#include "menu_state.h"
 
 using namespace std;
 
@@ -70,31 +72,18 @@ int main(int argc, char *argv[]) {
         InitWindow(800, 600, "Turn Based Game");
         SetTargetFPS(60);
 
-        rlImGuiSetup(true);
-
-        bool showDemo = true;
+        StateManager states;
+        states.change_state(std::make_unique<MenuState>(states));
 
         while (!WindowShouldClose()) {
+            states.update();
+
             BeginDrawing();
             ClearBackground(WHITE);
-
-            rlImGuiBegin();
-
-            if (showDemo) {
-                ImGui::ShowDemoWindow(&showDemo);
-            }
-
-            ImGui::Begin("Debug Window");
-            ImGui::Text("Title Screen");
-            ImGui::End();
-
-            rlImGuiEnd();
-
-
+            states.draw();
             EndDrawing();
         }
 
-        rlImGuiShutdown();
         CloseWindow();
     } else {
         cout << "Not proper arguement given\n";
