@@ -7,7 +7,9 @@ BattleState::BattleState(StateManager& manager) : manager(manager) {
 }
 
 void BattleState::update() {
-
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        manager.pop();
+    }
 }
 
 void BattleState::draw() {

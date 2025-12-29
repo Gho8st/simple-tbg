@@ -70,6 +70,7 @@ int main(int argc, char *argv[]) {
             cout << "Player lost\n";
     } else if (arg == 1) {
         InitWindow(800, 600, "Turn Based Game");
+        SetExitKey(KEY_NULL);
         SetTargetFPS(60);
 
         StateManager states;
@@ -77,7 +78,7 @@ int main(int argc, char *argv[]) {
 
         while (!WindowShouldClose()) {
             states.update();
-
+            
             BeginDrawing();
             ClearBackground(WHITE);
             states.draw();
