@@ -73,7 +73,7 @@ int main(int argc, char *argv[]) {
         SetTargetFPS(60);
 
         StateManager states;
-        states.change_state(std::make_unique<MenuState>(states));
+        states.push(std::make_unique<MenuState>(states));
 
         while (!WindowShouldClose()) {
             states.update();
@@ -82,6 +82,10 @@ int main(int argc, char *argv[]) {
             ClearBackground(WHITE);
             states.draw();
             EndDrawing();
+        }
+
+        while (!states.empty()) {
+            states.pop();
         }
 
         CloseWindow();

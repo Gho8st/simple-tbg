@@ -9,7 +9,7 @@ MenuState::MenuState(StateManager& manager) : manager(manager) {
 
 void MenuState::update() {
     if (IsKeyPressed(KEY_ENTER)) {
-        manager.change_state(std::make_unique<BattleState>(manager));
+        manager.push(std::make_unique<BattleState>(manager));
     }
 }
 

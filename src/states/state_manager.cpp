@@ -1,17 +1,26 @@
 #include "state_manager.h"
 
-void StateManager::change_state(std::unique_ptr<GameState> state) {
-    current = std::move(state);
+void StateManager::push(std::unique_ptr<GameState> state) {
+    stack.push_back(std::move(state));
+}
+
+void StateManager::pop() {
+    stack.pop_back();
+}
+
+void StateManager::replace(std::unique_ptr<GameState> state) {
+    pop();
+    push(std::move(state));
 }
 
 void StateManager::update() {
-    if (current) current->update();
+    stack.back()->update();
 }
 
 void StateManager::draw() {
-    if (current) current->draw();
+    stack.back()->draw();
 }
 
-bool StateManager::has_state() const {
-    return current != nullptr;
+bool StateManager::empty() const {
+    return stack.empty();
 }
