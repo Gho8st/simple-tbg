@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include "rlImGui.h"
 #include "imgui.h"
+#include "debug_overlay.h"
 
 using namespace std;
 
@@ -71,23 +72,16 @@ int main(int argc, char *argv[]) {
         SetTargetFPS(60);
 
         rlImGuiSetup(true);
-
-        bool showDemo = true;
+        DebugOverlay debugOverlay;
 
         while (!WindowShouldClose()) {
             BeginDrawing();
             ClearBackground(WHITE);
 
+            debugOverlay.update();
+
             rlImGuiBegin();
-
-            if (showDemo) {
-                ImGui::ShowDemoWindow(&showDemo);
-            }
-
-            ImGui::Begin("Debug Window");
-            ImGui::Text("Title Screen");
-            ImGui::End();
-
+                if (debugOverlay.is_open()) debugOverlay.draw();
             rlImGuiEnd();
 
 
