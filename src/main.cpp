@@ -5,6 +5,8 @@
 #include "imgui.h"
 #include "state_manager.h"
 #include "menu_state.h"
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
 
 using namespace std;
 
