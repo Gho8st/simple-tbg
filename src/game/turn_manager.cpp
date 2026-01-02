@@ -50,7 +50,7 @@ void TurnManager::display_turn_meter() {
     std::sort(display.begin(), display.end(), turn_cmp);
     int i = 1;
     for(Turn turn: display) {
-        printf("#%d: %.0f AV\n", i++, turn.turn_meter);
+        printf("#%d: %s %.0f AV\n", i++,turn.entity->get_name().c_str(), turn.turn_meter);
     }
 }
 

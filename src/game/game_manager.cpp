@@ -2,7 +2,7 @@
 #include <iostream>
 #include <random>
 
-int random_index(std::vector<Entity*> list);
+int random_index(int length);
 
 GameManager::GameManager(Team& player, Team& enemy) {
     playerTeam = &player;
@@ -22,48 +22,52 @@ Outcome GameManager::check_outcome() {
     return outcome;
 }
 
-void GameManager::play_turn() {
-    playerTeam->print_status(false);
-    enemyTeam->print_status(false);
+bool GameManager::if_player_turn() {
+    return playerTeam->contains(current->get_name());
+}
 
-    Entity* current = turnManager->next_turn();
+Entity& GameManager::get_current() {
+    return *current;
+}
 
-    int move = -1;
-    if(playerTeam->contains(current->get_name())) {
-        std::cout << "Now choose which option to use ur move...\n";
-        std::cout << "1. Attack\n";
-        std::cout << "2. Heal\n";
-        std::cout << "... or Skip\n";
-        std::cin >> move;
-        if (move == 1) {
-            int target = 0;
-            std::cout << "Now choose ur target...\n";
-            enemyTeam->print_status(true);
+void GameManager::next_turn() {
+    current = turnManager->next_turn();
+}
 
-            while(target < 1 || target > enemyTeam->get_team(true).size())
-                std::cin >> target;
-            Entity* targetEnemy = enemyTeam->get_team_member(target-1, true);
-            int dmg = targetEnemy->take_damage(current->get_attack());
-            printf("%s attacks %s with %d damage\n", current->get_name().c_str(), targetEnemy->get_name().c_str(),dmg);
-        } else if (move == 2) {
-            current->heal(20);
-            printf("%s heals with 20 health\n", current->get_name().c_str());
-        }
+void GameManager::play_enemy_turn() {
+    if (!enemyTeam->contains(current->get_name())) return;
 
-    } else {
-        int position = random_index(playerTeam->get_team(true));
-        Entity* targetEnemy = playerTeam->get_team_member(position, true);
-        int dmg = targetEnemy->take_damage(current->get_attack());
-        printf("Enemy's turn..\nNow %s attacks %s with %d damage\n", current->get_name().c_str(), targetEnemy->get_name().c_str(), dmg);
-    }
+    int position = random_index(playerTeam->get_team(true).size());
+    Entity* targetEnemy = playerTeam->get_team_member(position-1, true);
+    int dmg = targetEnemy->take_damage(current->get_attack());
 
     if (!playerTeam->if_alive()) outcome = Outcome::Enemy;
+}
+
+void GameManager::play_player_turn(int move, int target) {
+    if (!playerTeam->contains(current->get_name())) return;
+
+    if (move == 1) { // attack
+        Entity* targetEnemy = enemyTeam->get_team_member(target-1, true);
+        int dmg = targetEnemy->take_damage(current->get_attack());
+    } else if (move == 2) { // heal
+        Entity* targetAlly = playerTeam->get_team_member(target-1, true);
+        targetAlly->heal(20);
+    }
+
     if (!enemyTeam->if_alive()) outcome = Outcome::Player;
 }
 
-int random_index(std::vector<Entity*> list) {
+void GameManager::display_status() {playerTeam->print_status(false); enemyTeam->print_status(false);}
+void GameManager::display_turn_order() {turnManager->display_turn_meter();}
+
+
+Team& GameManager::get_player_team() {return *playerTeam;}
+Team& GameManager::get_enemy_team() {return *enemyTeam;}
+
+int random_index(int length) {
     std::random_device dev;
     std::mt19937 randomness_generator(dev());
-    std::uniform_int_distribution<int> index_destribution(0, list.size()-1);
+    std::uniform_int_distribution<int> index_destribution(1, length);
     return index_destribution(randomness_generator);
 }

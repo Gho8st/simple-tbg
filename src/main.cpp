@@ -24,8 +24,37 @@ int main() {
 
     cout << "Welcome to Simple TBG\n";
     GameManager gameManager = GameManager(player_team, enemy_team);
+
     while (gameManager.still_running()) {
-        gameManager.play_turn();
+        gameManager.next_turn();
+
+        gameManager.display_status();
+        gameManager.display_turn_order();
+        
+        Entity current = gameManager.get_current();
+        std::cout << current.get_name().append("'s turn\n").c_str();
+        if (gameManager.if_player_turn()) {
+            int move = -1;
+            std::cout << "Now choose which option to use ur move...\n";
+            std::cout << "1. Attack\n";
+            std::cout << "2. Heal\n";
+            std::cout << "... or Skip\n";
+            do {
+                std::cin >> move;
+            } while (move < 1 && move > 2);
+
+            std::cout << "Now choose ur target\n";
+            int target = -1;
+            Team targetTeam = (move == 2) ? gameManager.get_player_team() : gameManager.get_enemy_team();
+            targetTeam.print_status(true);
+            do {
+                std::cin >> target;
+            } while (target < 0 && target > targetTeam.get_team(true).size());
+
+            gameManager.play_player_turn(move, target);
+        } else {
+            gameManager.play_enemy_turn();
+        }
     }
 
     if (gameManager.check_outcome() == Outcome::Player)
